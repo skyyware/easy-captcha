@@ -123,3 +123,36 @@ test('changing action to another origin removes the local widget', async () => {
     api.destroy();
     dom.window.close();
 });
+
+test('browser form restoration cannot display an unverified proof as verified', async () => {
+    const { dom, api } = setup();
+    const widget = dom.window.document.querySelector('altcha-widget');
+    const checkbox = dom.window.document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = true;
+    widget.append(checkbox);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    assert.equal(checkbox.autocomplete, 'off');
+    assert.equal(checkbox.checked, false);
+    checkbox.checked = true;
+    dom.window.dispatchEvent(new dom.window.Event('pageshow'));
+    assert.equal(checkbox.checked, false);
+    widget.getState = () => 'verified';
+    checkbox.checked = true;
+    dom.window.dispatchEvent(new dom.window.Event('pageshow'));
+    assert.equal(checkbox.checked, true);
+    api.destroy();
+    dom.window.close();
+});
+
+test('form reset also resets the widget instead of leaving a stale verified label', () => {
+    const { dom, api } = setup();
+    const form = dom.window.document.querySelector('form');
+    let resets = 0;
+    form.querySelector('altcha-widget').reset = () => { resets += 1; };
+    form.reset();
+    assert.equal(resets, 1);
+    assert.equal(form.querySelector('input[name="starcode"]').value, '');
+    api.destroy();
+    dom.window.close();
+});

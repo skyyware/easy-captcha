@@ -1,6 +1,6 @@
 {
   "name": "skyyware/starcode",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Self-hosted, privacy-friendly form protection for Shopware 6",
   "type": "shopware-platform-plugin",
   "license": "MIT",

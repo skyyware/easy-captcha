@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1 - 2026-10-29
+
+- Keep browser-restored checkbox state aligned with the actual proof state.
+- Reset the widget and its feedback when the surrounding form is reset.
+- Add regression checks for restoration and reset. Server validation is unchanged.
+
 ## 0.1.0 - 2026-10-29
 
 Initial integration-test release.

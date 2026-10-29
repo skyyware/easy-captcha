@@ -12,7 +12,7 @@ that a visitor is human or stop every bot.
 
 ## Install
 
-Version 0.1.0 is an initial release for integration testing. Validate your theme,
+Version 0.1.1 is an initial release for integration testing. Validate your theme,
 extensions and form integrations in an isolated shop before production use.
 
 ```sh

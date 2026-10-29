@@ -44,7 +44,8 @@ the ALTCHA and Svelte license notices. Verify native configuration schema and
 the supported Shopware/PHP combination in an isolated shop.
 
 Check a valid request, a missing proof, expiry, replay, changed form actions,
-failed challenge requests, keyboard operation and narrow screens. Confirm that
+failed challenge requests, reload/history restoration, form reset, keyboard
+operation and narrow screens. Confirm that
 checkout and unsubscribe are untouched. Verify that no external requests or
 real messages occur. Test custom adapters separately; the standard widget cannot
 prove that a third-party submission script uses the integration correctly.

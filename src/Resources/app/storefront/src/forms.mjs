@@ -21,6 +21,17 @@ export function install(win, config) {
     const document = win.document;
     const states = new WeakMap();
 
+    function syncCheckbox(state) {
+        const checkbox = state?.widget.querySelector('input[type="checkbox"]');
+        if (!checkbox) return;
+        checkbox.autocomplete = 'off';
+        if (!['verified', 'verifying'].includes(state.widget.getState?.())) checkbox.checked = false;
+    }
+
+    function restoreCheckboxes() {
+        for (const form of document.forms) syncCheckbox(states.get(form));
+    }
+
     function attach(form, submitter = null) {
         const path = targetFor(form, submitter, config, win.location);
         let state = states.get(form);
@@ -63,8 +74,15 @@ export function install(win, config) {
         widget.addEventListener('verified', event => { input.value = event.detail?.payload || ''; state.used = false; });
         widget.addEventListener('statechange', event => {
             if (event.detail?.state !== 'verified') input.value = '';
+            syncCheckbox(state);
         });
-        form.addEventListener('reset', () => { input.value = ''; state.used = false; });
+        form.addEventListener('reset', () => {
+            if (states.get(form) !== state) return;
+            input.value = '';
+            state.used = false;
+            state.error.hidden = true;
+            widget.reset?.();
+        });
         return state;
     }
 
@@ -131,13 +149,20 @@ export function install(win, config) {
     }
 
     win.addEventListener('submit', submit, true);
+    win.addEventListener('pageshow', restoreCheckboxes);
     const observer = new win.MutationObserver(records => {
         for (const record of records) {
             for (const node of record.addedNodes) if (node.nodeType === 1) scan(node);
             if (record.type === 'attributes' && record.target instanceof win.HTMLFormElement) attach(record.target);
+            const form = record.target.closest?.('form');
+            if (form) syncCheckbox(states.get(form));
         }
     });
     observer.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['action', 'method'] });
     scan();
-    return Object.freeze({ protect, scan, destroy: () => { observer.disconnect(); win.removeEventListener('submit', submit, true); } });
+    return Object.freeze({ protect, scan, destroy: () => {
+        observer.disconnect();
+        win.removeEventListener('submit', submit, true);
+        win.removeEventListener('pageshow', restoreCheckboxes);
+    } });
 }
