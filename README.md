@@ -1,6 +1,6 @@
 # Starcode
 
-<img src="src/Resources/config/plugin.png" width="96" height="96" alt="Starcode symbol: a star between code brackets">
+<img src="docs/starcode-logo.png" width="324" height="108" alt="Starcode">
 
 Self-hosted form protection for Shopware 6.7. MIT licensed, without an account,
 CAPTCHA subscription or third-party verification requests.
