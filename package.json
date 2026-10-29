@@ -1,0 +1,11 @@
+{
+  "name": "@skyyware/starcode",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "test": "node --test tests/js/*.test.mjs"
+  },
+  "dependencies": {"altcha": "3.5.0"},
+  "devDependencies": {"esbuild": "0.25.12", "jsdom": "26.1.0"}
+}

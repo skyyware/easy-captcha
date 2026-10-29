@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+    <card>
+        <title>Starcode</title>
+        <input-field type="bool" cache-relevant="true">
+            <name>enabled</name>
+            <label>Enable form protection</label>
+            <label lang="de-DE">Formularschutz aktivieren</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+        <input-field type="single-select" cache-relevant="true">
+            <name>mode</name>
+            <label>Protected forms</label>
+            <label lang="de-DE">Geschützte Formulare</label>
+            <options>
+                <option><id>selected</id><name>Selected groups and submission URLs</name><name lang="de-DE">Ausgewählte Gruppen und Absende-URLs</name></option>
+                <option><id>all</id><name>All supported public forms</name><name lang="de-DE">Alle unterstützten öffentlichen Formulare</name></option>
+            </options>
+            <defaultValue>selected</defaultValue>
+        </input-field>
+        <input-field type="multi-select" cache-relevant="true">
+            <name>groups</name>
+            <label>Form groups</label>
+            <label lang="de-DE">Formulargruppen</label>
+            <options>
+                <option><id>newsletter</id><name>Newsletter</name></option>
+                <option><id>contact</id><name>Contact</name><name lang="de-DE">Kontakt</name></option>
+                <option><id>registration</id><name>Account registration</name><name lang="de-DE">Kundenregistrierung</name></option>
+                <option><id>recovery</id><name>Password recovery</name><name lang="de-DE">Passwort vergessen</name></option>
+                <option><id>reviews</id><name>Product reviews</name><name lang="de-DE">Produktbewertungen</name></option>
+                <option><id>revocation</id><name>Revocation request</name><name lang="de-DE">Widerrufsformular</name></option>
+            </options>
+            <defaultValue>newsletter</defaultValue>
+        </input-field>
+        <input-field type="textarea" cache-relevant="true">
+            <name>paths</name>
+            <label>Additional same-origin submission paths</label>
+            <label lang="de-DE">Zusätzliche lokale Absende-Pfade</label>
+            <helpText>One path per line, e.g. /form/custom or /form/custom/*. The asterisk matches one segment. External forms and iframes require a server-side adapter. Checkout, payments, administration and webhooks are excluded.</helpText>
+            <helpText lang="de-DE">Ein Pfad pro Zeile, z. B. /form/custom oder /form/custom/*. Der Stern ersetzt ein Segment. Externe Formulare und Iframes benötigen einen serverseitigen Adapter. Checkout, Zahlungen, Administration und Webhooks sind ausgenommen.</helpText>
+        </input-field>
+    </card>
+</config>

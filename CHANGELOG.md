@@ -1,0 +1,17 @@
+# Changelog
+
+## 0.1.0 - 2026-10-29
+
+Initial integration-test release.
+
+- Self-hosted ALTCHA proof of work with a locally bundled checkbox and worker.
+- Native per-sales-channel configuration for six form groups and selected paths.
+- Storefront and Store API enforcement, expiry, atomic replay prevention and
+  bounded challenge rates.
+- Dynamic form discovery and an explicit API for scripted submissions.
+- German and English text, theme colors, keyboard input and responsive layout.
+- PHP, JavaScript and isolated Shopware controller tests. No external CAPTCHA
+  account or repository automation.
+
+External provider forms need a server-side adapter. No adapter or production
+compatibility guarantee is included in this release.

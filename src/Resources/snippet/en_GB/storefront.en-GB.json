@@ -1,0 +1,8 @@
+{
+  "starcode": {
+    "retry": "Please complete the security check again and resubmit the form.",
+    "unavailable": "The security check is temporarily unavailable. Please try again in a minute.",
+    "back": "Back to the form",
+    "noscript": "Please enable JavaScript to submit this form."
+  }
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults autowire="true" autoconfigure="true"/>
+        <service id="Skyyware\Starcode\Protection\ProtectionPolicy"/>
+        <service id="Skyyware\Starcode\Protection\SettingsProvider"/>
+        <service id="Skyyware\Starcode\Protection\DatabaseProofStore"/>
+        <service id="Skyyware\Starcode\Protection\ProofStore" alias="Skyyware\Starcode\Protection\DatabaseProofStore"/>
+        <service id="Skyyware\Starcode\Protection\ProofService">
+            <argument key="$secret">%kernel.secret%</argument>
+        </service>
+        <service id="Skyyware\Starcode\Storefront\ChallengeController" public="true">
+            <tag name="controller.service_arguments"/>
+        </service>
+        <service id="Skyyware\Starcode\Storefront\ProtectionSubscriber"/>
+        <service id="Skyyware\Starcode\Storefront\RenderSubscriber"/>
+    </services>
+</container>

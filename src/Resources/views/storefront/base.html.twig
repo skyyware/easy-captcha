@@ -1,0 +1,11 @@
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+{% block base_body_script %}
+    {{ parent() }}
+    {% if starcode is defined %}
+        <link rel="stylesheet" href="{{ asset('bundles/skyystarcode/starcode.css') }}?v=0.1.0">
+        <div hidden data-starcode-config="{{ starcode|json_encode|e('html_attr') }}"></div>
+        <script type="module" src="{{ asset('bundles/skyystarcode/starcode.js') }}?v=0.1.0"></script>
+        <noscript><p class="container alert alert-info">{{ 'starcode.noscript'|trans }}</p></noscript>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,8 @@
+{
+  "starcode": {
+    "retry": "Bitte die Sicherheitsprüfung erneut durchführen und das Formular noch einmal absenden.",
+    "unavailable": "Die Sicherheitsprüfung ist gerade nicht verfügbar. Bitte in einer Minute erneut versuchen.",
+    "back": "Zurück zum Formular",
+    "noscript": "Zum Absenden dieses Formulars bitte JavaScript aktivieren."
+  }
+}

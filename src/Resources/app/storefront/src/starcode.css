@@ -1,0 +1,29 @@
+.starcode-check {
+    display: block;
+    width: 100%;
+    max-width: 26rem;
+    margin: 1rem 0;
+    color: inherit;
+    font: inherit;
+    letter-spacing: 0;
+    --altcha-color-base: var(--bs-body-bg, #fff);
+    --altcha-color-base-content: var(--bs-body-color, #253344);
+    --altcha-color-border: var(--bs-border-color, #bcc3cd);
+    --altcha-color-primary: var(--bs-primary, #087e8b);
+    --altcha-border-radius: 4px;
+    --altcha-max-width: 100%;
+}
+.starcode-check altcha-widget { display: block; width: 100%; min-height: 54px; }
+.starcode-check .altcha { font-family: inherit; font-size: 14px; letter-spacing: 0; }
+.starcode-check .altcha-label { overflow-wrap: anywhere; }
+.starcode-check .altcha-footer { display: none; }
+.starcode-check input:focus-visible { outline: 0; box-shadow: none; background-color: #cbe8f1; }
+.starcode-message { margin: .5rem 0 0; font-size: 14px; color: var(--bs-danger, #b12626); }
+.starcode-error-page { font-family: system-ui, sans-serif; color: #253344; background: #f6f7f8; padding: 24px; }
+.starcode-error-page main { max-width: 640px; margin: 10vh auto; }
+.starcode-error-page h1 { font-size: 22px; line-height: 1.5; }
+.starcode-error-page button { padding: 12px 20px; border: 1px solid #087e8b; border-radius: 4px; background: #087e8b; color: #fff; font: inherit; }
+.starcode-error-page button:focus-visible { outline: 0; text-decoration: underline; background: #075c65; }
+@media (prefers-reduced-motion: reduce) {
+    .starcode-check * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
