@@ -23,12 +23,30 @@ shop theme. Keyboard and responsive checks are not a full accessibility audit.
 
 ## Bounded data cleanup
 
-Expired entries are not valid proofs. If the plugin is disabled or sees no new
-traffic, an operator can remove expired entries manually:
+Expired entries are not valid proofs. While the plugin is active, an operator
+can inspect and remove expired rows without waiting for visitor traffic:
+
+```sh
+php bin/console starcode:cleanup --dry-run
+php bin/console starcode:cleanup
+```
+
+The dry run reports a count without changing rows. Cleanup uses one cutoff,
+deletes at most 1,000 rows per table per batch, and stops after 100 batches.
+Rows that have not expired at the cutoff stay unchanged. If expired rows remain,
+the command exits with status 1 and asks you to run it again. A repeated run
+with no expired rows succeeds without deleting anything.
+
+The command does not schedule itself. The five-minute proof validity and
+two-minute rate expiry are not physical deletion deadlines. A physical
+retention deadline needs an approved invocation policy and verified execution.
+
+When the plugin is disabled, its console command is unavailable. An operator
+can use bounded SQL under the shop's maintenance policy instead:
 
 ```sql
-DELETE FROM skyy_starcode_proof WHERE expires_at < UNIX_TIMESTAMP() LIMIT 1000;
-DELETE FROM skyy_starcode_rate WHERE expires_at < UNIX_TIMESTAMP() LIMIT 1000;
+DELETE FROM skyy_starcode_proof WHERE expires_at <= UNIX_TIMESTAMP() LIMIT 1000;
+DELETE FROM skyy_starcode_rate WHERE expires_at <= UNIX_TIMESTAMP() LIMIT 1000;
 ```
 
 Repeat only as needed under the shop's maintenance policy. No customer data,

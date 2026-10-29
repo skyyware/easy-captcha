@@ -116,7 +116,9 @@ legitimate visitors do not all share the proxy's rate limit.
 
 Rate records have a two-minute logical lifetime. Expired rate and proof rows
 are removed in bounded batches when another challenge is requested. Without
-new requests, expired rows remain until the next request or manual cleanup.
+new requests, expired rows remain until later challenge traffic or an operator
+runs `php bin/console starcode:cleanup`. Use `--dry-run` to count expired rows
+without deleting them. Logical expiry is not a physical deletion deadline.
 No consumer, cron job or scheduler is created. Deactivation retains the plugin's
 tables. See [maintenance](docs/maintenance.md) for cleanup and upgrades.
 
@@ -126,9 +128,10 @@ log retention, lawful processing and review of other services used by the form.
 
 ## Compatibility and verification
 
-Requires Shopware 6.7 and PHP 8.2, 8.3 or 8.4. Tested locally against Shopware
-6.7.15.1 and PHP 8.4.27. Other declared PHP minors and custom themes need their
-own verification. This release has not had an independent security audit.
+Requires Shopware 6.7 and PHP 8.2, 8.3 or 8.4. The PHP tests pass on 8.2.35,
+8.3.36 and 8.4.27. Native Shopware 6.7.15.1 form integration was checked on
+PHP 8.2.35 with the default Storefront theme. Custom themes and submission
+scripts need their own checks. This is not an independent security audit.
 
 The test suite covers scope selection, expiry, malformed payloads, signatures,
 replay protection, rate limits, dynamic forms, custom submitters and retries.

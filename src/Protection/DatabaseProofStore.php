@@ -24,12 +24,27 @@ final readonly class DatabaseProofStore implements ProofStore
     {
         $now = time();
         $id = hash('sha256', $key . ':' . intdiv($now, 60));
-        $this->connection->executeStatement('DELETE FROM skyy_starcode_proof WHERE expires_at < ? LIMIT 100', [$now]);
-        $this->connection->executeStatement('DELETE FROM skyy_starcode_rate WHERE expires_at < ? LIMIT 100', [$now]);
+        $this->deleteExpired($now);
         $this->connection->executeStatement(
             'INSERT INTO skyy_starcode_rate (id, hits, expires_at) VALUES (?, 1, ?) ON DUPLICATE KEY UPDATE hits = LEAST(hits + 1, 100000)',
             [$id, $now + 120],
         );
         return (int) $this->connection->fetchOne('SELECT hits FROM skyy_starcode_rate WHERE id = ?', [$id]) <= $limit;
+    }
+
+    public function deleteExpired(int $cutoff, int $batchSize = 100): int
+    {
+        if ($batchSize < 1 || $batchSize > 10000) {
+            throw new \InvalidArgumentException('Cleanup batch size must be between 1 and 10000.');
+        }
+
+        return $this->connection->executeStatement('DELETE FROM skyy_starcode_proof WHERE expires_at <= ? LIMIT ' . $batchSize, [$cutoff])
+            + $this->connection->executeStatement('DELETE FROM skyy_starcode_rate WHERE expires_at <= ? LIMIT ' . $batchSize, [$cutoff]);
+    }
+
+    public function countExpired(int $cutoff): int
+    {
+        return (int) $this->connection->fetchOne('SELECT COUNT(*) FROM skyy_starcode_proof WHERE expires_at <= ?', [$cutoff])
+            + (int) $this->connection->fetchOne('SELECT COUNT(*) FROM skyy_starcode_rate WHERE expires_at <= ?', [$cutoff]);
     }
 }

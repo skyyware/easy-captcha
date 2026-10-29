@@ -5,6 +5,7 @@
         <service id="Skyyware\Starcode\Protection\ProtectionPolicy"/>
         <service id="Skyyware\Starcode\Protection\SettingsProvider"/>
         <service id="Skyyware\Starcode\Protection\DatabaseProofStore"/>
+        <service id="Skyyware\Starcode\Command\CleanupCommand"/>
         <service id="Skyyware\Starcode\Protection\ProofStore" alias="Skyyware\Starcode\Protection\DatabaseProofStore"/>
         <service id="Skyyware\Starcode\Protection\ProofService">
             <argument key="$secret">%kernel.secret%</argument>
