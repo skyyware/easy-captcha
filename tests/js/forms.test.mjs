@@ -65,6 +65,74 @@ test('each scripted submission gets a fresh proof with privacy options disabled'
     dom.window.close();
 });
 
+test('a delayed verified event cannot make a consumed AJAX proof reusable', async () => {
+    const { dom, api } = setup();
+    const form = dom.window.document.querySelector('form');
+    const widget = form.querySelector('altcha-widget');
+    let currentState = 'unverified';
+    let issued = 0;
+    let deliverVerified;
+    widget.getState = () => currentState;
+    widget.reset = () => { currentState = 'unverified'; };
+    widget.verify = async () => {
+        const payload = `proof-${++issued}`;
+        currentState = 'verified';
+        deliverVerified = () => widget.dispatchEvent(new dom.window.CustomEvent('verified', { detail: { payload } }));
+        return { payload };
+    };
+
+    await api.protect(form);
+    const first = new dom.window.FormData(form).get('starcode');
+    deliverVerified();
+    await api.protect(form);
+    const second = new dom.window.FormData(form).get('starcode');
+
+    assert.equal(first, 'proof-1');
+    assert.equal(second, 'proof-2');
+    assert.equal(issued, 2);
+    api.destroy();
+    dom.window.close();
+});
+
+test('a preverified native submission reaches handlers without a nested requestSubmit', async () => {
+    const { dom, api, calls } = setup();
+    const form = dom.window.document.querySelector('form');
+    const button = form.querySelector('button');
+    const widget = form.querySelector('altcha-widget');
+    widget.getState = () => 'verified';
+    widget.dispatchEvent(new dom.window.CustomEvent('verified', { detail: { payload: 'preverified-proof' } }));
+    const received = [];
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+        received.push({ submitter: event.submitter, proof: new dom.window.FormData(form).get('starcode') });
+    });
+
+    form.requestSubmit(button);
+
+    assert.deepEqual(received, [{ submitter: button, proof: 'preverified-proof' }]);
+    assert.equal(calls(), 0);
+    assert.equal(await api.protect(form), 'proof-1');
+    assert.equal(calls(), 1);
+    api.destroy();
+    dom.window.close();
+});
+
+test('a new manually verified proof is accepted without repeating verification', async () => {
+    const { dom, api, calls } = setup();
+    const form = dom.window.document.querySelector('form');
+    assert.equal(await api.protect(form), 'proof-1');
+    const widget = form.querySelector('altcha-widget');
+    widget.getState = () => 'verified';
+    widget.dispatchEvent(new dom.window.CustomEvent('verified', { detail: { payload: 'manual-proof' } }));
+
+    assert.equal(await api.protect(form), 'manual-proof');
+    assert.equal(calls(), 1);
+    assert.equal(await api.protect(form), 'proof-2');
+    assert.equal(calls(), 2);
+    api.destroy();
+    dom.window.close();
+});
+
 test('custom submit action and locale prefix use the actual destination', () => {
     const { dom, api } = setup('<form method="post" action="/ignored"><button formaction="/de/form/contact">Send</button></form>');
     const form = dom.window.document.querySelector('form');

@@ -69,9 +69,9 @@ export function install(win, config) {
         const button = form.querySelector('button[type="submit"], input[type="submit"], button:not([type])');
         if (button) button.before(container);
         else form.append(container);
-        state = { widget, input, error, container, path, used: false, pending: null, resuming: false };
+        state = { widget, input, error, container, path, usedProof: '', pending: null, resuming: false };
         states.set(form, state);
-        widget.addEventListener('verified', event => { input.value = event.detail?.payload || ''; state.used = false; });
+        widget.addEventListener('verified', event => { input.value = event.detail?.payload || ''; });
         widget.addEventListener('statechange', event => {
             if (event.detail?.state !== 'verified') input.value = '';
             syncCheckbox(state);
@@ -79,11 +79,14 @@ export function install(win, config) {
         form.addEventListener('reset', () => {
             if (states.get(form) !== state) return;
             input.value = '';
-            state.used = false;
             state.error.hidden = true;
             widget.reset?.();
         });
         return state;
+    }
+
+    function hasUnusedProof(state) {
+        return state.widget.getState?.() === 'verified' && state.input.value && state.input.value !== state.usedProof;
     }
 
     async function protect(form, submitter = null) {
@@ -96,14 +99,14 @@ export function install(win, config) {
             try {
                 await win.customElements.whenDefined('altcha-widget');
                 await Promise.resolve();
-                if (state.used || state.widget.getState() !== 'verified' || !state.input.value) {
+                if (!hasUnusedProof(state)) {
                     state.widget.reset();
                     state.input.value = '';
                     const result = await state.widget.verify();
                     if (!result?.payload) throw new Error('STARCODE_VERIFICATION_FAILED');
                     state.input.value = result.payload;
                 }
-                state.used = true;
+                state.usedProof = state.input.value;
                 return state.input.value;
             } catch (error) {
                 state.input.value = '';
@@ -131,6 +134,11 @@ export function install(win, config) {
         const form = event.target;
         const state = attach(form, event.submitter);
         if (!state || state.resuming) return;
+        if (!state.pending && hasUnusedProof(state)) {
+            state.usedProof = state.input.value;
+            state.error.hidden = true;
+            return;
+        }
         event.preventDefault();
         event.stopImmediatePropagation();
         if (state.pending) return;

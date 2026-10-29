@@ -45,7 +45,13 @@ the supported Shopware/PHP combination in an isolated shop.
 
 Check a valid request, a missing proof, expiry, replay, changed form actions,
 failed challenge requests, reload/history restoration, form reset, keyboard
-operation and narrow screens. Confirm that
+operation and narrow screens. In the native CMS contact form, verify the
+checkbox before submitting and confirm that the first click sends exactly one
+POST. Also test submission without checking the box first. For a dynamic form,
+await `Starcode.protect(form)` before each of two sequential AJAX attempts and
+create a new `FormData` each time. Each attempt must use a different proof.
+Distinguish Starcode rejection from Shopware's native contact rate limit.
+Confirm that
 checkout and unsubscribe are untouched. Verify that no external requests or
 real messages occur. Test custom adapters separately; the standard widget cannot
 prove that a third-party submission script uses the integration correctly.
