@@ -61,6 +61,15 @@ final class ProtectionPolicyTest extends TestCase
         self::assertFalse($policy->protects($settings, '/some-extension/action'));
     }
 
+    public function testChallengeRoutesCannotBeAddedAsProtectedForms(): void
+    {
+        $policy = new ProtectionPolicy();
+        foreach (['/starcode/challenge', '/easy-captcha/challenge'] as $path) {
+            $settings = new Settings(['enabled' => true, 'groups' => [], 'paths' => $path]);
+            self::assertFalse($policy->protects($settings, $path));
+        }
+    }
+
     public function testCustomPathsAreAnchoredAndSingleSegmentWildcards(): void
     {
         $settings = new Settings(['enabled' => true, 'groups' => [], 'paths' => "/form/custom/*\n/landing/subscribe"]);

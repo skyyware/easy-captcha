@@ -1,5 +1,5 @@
 {
-  "name": "@skyyware/starcode",
+  "name": "@skyyware/easy-captcha",
   "private": true,
   "type": "module",
   "scripts": {

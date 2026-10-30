@@ -13,6 +13,13 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 final class ProofCleanupTest extends TestCase
 {
+    public function testRenamedCommandKeepsItsOriginalAlias(): void
+    {
+        $command = new CleanupCommand(new DatabaseProofStore($this->createMock(Connection::class)));
+        self::assertSame('easy-captcha:cleanup', $command->getName());
+        self::assertContains('starcode:cleanup', $command->getAliases());
+    }
+
     public static function invalidBatchSizes(): array
     {
         return [[0], [-1], [10001]];

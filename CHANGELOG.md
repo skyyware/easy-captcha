@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.0 - 2026-10-30
+
+- Rename the product and Composer package to Easy Captcha and
+  `skyyware/easy-captcha`, with a new icon and wordmark.
+- Keep the Shopware plugin identity, settings, tables, migrations and existing
+  proof protocol. Replace the old Composer 0.1 package without uninstalling.
+- Add `window.EasyCaptcha`, Easy Captcha challenge URLs and
+  `easy-captcha:cleanup`, keeping their original names as aliases.
+- Let an already verified native form submit on its first click. Prevent a
+  delayed widget event from reusing a consumed proof on sequential AJAX calls.
+- Add bounded operator cleanup with a dry run and a nonzero status when its
+  batch budget leaves expired rows. No scheduler or worker is installed.
+
 ## 0.1.1 - 2026-10-29
 
 - Keep browser-restored checkbox state aligned with the actual proof state.

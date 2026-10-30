@@ -17,6 +17,8 @@ final readonly class ChallengeController
 
     #[Route(path: '/starcode/challenge', name: 'frontend.starcode.challenge', defaults: ['_routeScope' => ['storefront'], 'XmlHttpRequest' => true], methods: ['GET'])]
     #[Route(path: '/store-api/starcode/challenge', name: 'store-api.starcode.challenge', defaults: ['_routeScope' => ['store-api']], methods: ['GET'])]
+    #[Route(path: '/easy-captcha/challenge', name: 'frontend.easy_captcha.challenge', defaults: ['_routeScope' => ['storefront'], 'XmlHttpRequest' => true], methods: ['GET'])]
+    #[Route(path: '/store-api/easy-captcha/challenge', name: 'store-api.easy_captcha.challenge', defaults: ['_routeScope' => ['store-api']], methods: ['GET'])]
     public function challenge(Request $request, SalesChannelContext $context): JsonResponse
     {
         $path = $request->query->all()['target'] ?? null;

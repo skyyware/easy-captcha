@@ -33,7 +33,7 @@ $container = $kernel->getContainer();
 $db = $container->get(Connection::class);
 $config = $container->get(SystemConfigService::class);
 $events = $container->get('event_dispatcher');
-$denyMail = static function (): never { throw new RuntimeException('Mail forbidden in Starcode probe.'); };
+$denyMail = static function (): never { throw new RuntimeException('Mail forbidden in Easy Captcha probe.'); };
 $events->addListener(Symfony\Component\Mailer\Event\MessageEvent::class, $denyMail, PHP_INT_MAX);
 $events->addListener('mail.before.send', $denyMail, PHP_INT_MAX);
 $events->addListener(KernelEvents::CONTROLLER, static function (ControllerEvent $event): void {
@@ -94,26 +94,34 @@ try {
         if ($response->getStatusCode() !== 422) {
             fwrite(STDERR, json_encode(['path' => $path, 'errorCodes' => array_column(json_decode((string) $response->getContent(), true)['errors'] ?? [], 'code')]) . "\n");
         }
-        $assert($response->getStatusCode() === 422 && (str_contains((string) $response->getContent(), 'STARCODE_PROOF_REQUIRED') || str_contains((string) $response->getContent(), '<title>Starcode</title>')), 'missing-proof:' . $path . ':' . $response->getStatusCode());
+        $assert($response->getStatusCode() === 422 && (str_contains((string) $response->getContent(), 'STARCODE_PROOF_REQUIRED') || str_contains((string) $response->getContent(), '<title>Easy Captcha</title>')), 'missing-proof:' . $path . ':' . $response->getStatusCode());
     }
     $response = $request('/%66orm/contact', 'POST');
     $assert($response->getStatusCode() === 422, 'encoded-path-cannot-bypass');
-    foreach ([['/form/contact', false], ['/store-api/contact-form', false], ['/store-api/contact-form', true]] as [$path, $headerProof]) {
-        $endpoint = str_starts_with($path, '/store-api/') ? '/store-api/starcode/challenge' : '/starcode/challenge';
+    foreach ([
+        ['/form/contact', false, '/starcode/challenge'],
+        ['/store-api/contact-form', false, '/store-api/starcode/challenge'],
+        ['/store-api/contact-form', true, '/store-api/starcode/challenge'],
+        ['/form/contact', false, '/easy-captcha/challenge'],
+        ['/store-api/contact-form', false, '/store-api/easy-captcha/challenge'],
+        ['/store-api/contact-form', true, '/store-api/easy-captcha/challenge'],
+    ] as [$path, $headerProof, $endpoint]) {
+        $case = $endpoint . ':' . $path . ($headerProof ? ':header' : ':body');
         $challengeResponse = $request($endpoint . '?target=' . rawurlencode($path));
-        $assert($challengeResponse->getStatusCode() === 200 && str_contains($challengeResponse->headers->get('Cache-Control', ''), 'no-store'), 'uncached-challenge:' . $path);
+        $assert($challengeResponse->getStatusCode() === 200 && str_contains($challengeResponse->headers->get('Cache-Control', ''), 'no-store'), 'uncached-challenge:' . $case);
         $challenge = Challenge::fromArray(json_decode((string) $challengeResponse->getContent(), true, flags: JSON_THROW_ON_ERROR));
         $solution = (new Altcha())->solveChallenge(new SolveChallengeOptions($challenge, new Pbkdf2(), timeout: 5));
-        $assert($solution !== null, 'solve:' . $path);
+        $assert($solution !== null, 'solve:' . $case);
         $token = (new Payload($challenge, $solution))->toBase64();
         $proofIds[] = hash('sha256', $challenge->signature);
         $response = $request($path, 'POST', $headerProof ? [] : ['starcode' => $token], $headerProof ? ['HTTP_X_STARCODE_PROOF' => $token] : []);
-        $assert($response->getStatusCode() === 200 && str_contains((string) $response->getContent(), 'businessControllerSuppressed'), 'valid-proof-reaches-controller-without-business-side-effects:' . $path . ($headerProof ? ':header' : ':body'));
-        $assert($request($path, 'POST', ['starcode' => $token])->getStatusCode() === 422, 'replay-rejected:' . $path);
+        $assert($response->getStatusCode() === 200 && str_contains((string) $response->getContent(), 'businessControllerSuppressed'), 'valid-proof-reaches-controller-without-business-side-effects:' . $case);
+        $assert($request($path, 'POST', ['starcode' => $token])->getStatusCode() === 422, 'replay-rejected:' . $case);
     }
     $unsubscribe = $request('/form/newsletter', 'POST', ['option' => 'unsubscribe']);
     $assert($unsubscribe->getStatusCode() === 200 && str_contains((string) $unsubscribe->getContent(), 'businessControllerSuppressed'), 'unsubscribe-exempt-without-business-side-effects');
     $assert($request('/starcode/challenge?target=%2Fcheckout%2Forder')->getStatusCode() === 404, 'checkout-challenge-excluded');
+    $assert($request('/easy-captcha/challenge?target=%2Fcheckout%2Forder')->getStatusCode() === 404, 'checkout-challenge-alias-excluded');
     $passed = true;
 } finally {
     $config->set('SkyyStarcode.config.mode', $previousMode);

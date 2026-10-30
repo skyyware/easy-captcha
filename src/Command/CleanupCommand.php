@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\{InputInterface, InputOption};
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-#[AsCommand(name: 'starcode:cleanup', description: 'Remove expired Starcode proofs and rate records.')]
+#[AsCommand(name: 'easy-captcha:cleanup', description: 'Remove expired Easy Captcha proofs and rate records.', aliases: ['starcode:cleanup'])]
 final class CleanupCommand extends Command
 {
     public function __construct(private readonly DatabaseProofStore $store)

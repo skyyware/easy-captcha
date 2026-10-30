@@ -29,7 +29,7 @@ final readonly class RenderSubscriber implements EventSubscriberInterface
             return;
         }
         $event->setParameter('starcode', [
-            'challengeUrl' => $this->router->generate('frontend.starcode.challenge'),
+            'challengeUrl' => $this->router->generate('frontend.easy_captcha.challenge'),
             'basePath' => $event->getRequest()->attributes->get(RequestTransformer::SALES_CHANNEL_BASE_URL, ''),
             'patterns' => $this->policy->patterns($settings),
             'language' => str_starts_with($event->getRequest()->getLocale(), 'de') ? 'de' : 'en',

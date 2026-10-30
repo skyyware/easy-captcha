@@ -65,6 +65,6 @@ final class ProtectionPolicy
                 }
             }
         }
-        return preg_match('~^/(?:api|admin|store-api|checkout|account|registration|newsletter|payment|payments|paypal|amazon|adyen|mollie|stripe|widgets|starcode|hook|hooks|webhook|webhooks)(?:/|$)~i', $path) === 1;
+        return preg_match('~^/(?:api|admin|store-api|checkout|account|registration|newsletter|payment|payments|paypal|amazon|adyen|mollie|stripe|widgets|starcode|easy-captcha|hook|hooks|webhook|webhooks)(?:/|$)~i', $path) === 1;
     }
 }

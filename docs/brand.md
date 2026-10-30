@@ -1,34 +1,36 @@
-# Starcode mark
+# Easy Captcha mark
 
-Concept B, selected on 29 October 2026, uses a two-part geometric S in near-black
-and emerald. It replaces the earlier brackets-and-star mark, which remains in
-Git history.
+The mark pairs an open rounded C with an emerald check. The visible name is
+Easy Captcha. It replaces the Starcode S mark, which remains in Git history.
 
 Use `src/Resources/config/plugin.png` for the native Shopware extension icon.
-Use `docs/starcode-logo.png` for the horizontal symbol and wordmark. Both PNGs
-have transparent backgrounds and are intended for light surfaces. Preserve
-their aspect ratios and clear space. Do not add a badge, tagline or shadow.
+Use `docs/easy-captcha-logo.png` for the horizontal symbol and wordmark on light
+surfaces. Both have transparent backgrounds. The README uses the opaque white
+version, `docs/easy-captcha-logo-readme.png`, so the dark lettering remains
+readable in light and dark GitHub themes. Preserve aspect ratios and clear
+space. Do not add a badge, tagline, shadow or certification claim.
 
-The icon is 1254 x 1254 pixels. The horizontal logo is 2172 x 724 pixels.
-The selected source files were copied without pixel changes. Native Shopware
-scales the extension icon to its display size; do not replace that presentation
-with a separate custom administration component.
+The icon is 1254 x 1254 pixels. Both wordmarks are 2172 x 724 pixels. The
+supplied source files were copied without pixel changes. Shopware scales its
+native extension icon; no custom administration component is needed.
 
 ## Provenance and limits
 
-The artwork was produced with the built-in image-generation tool on
-29 October 2026 from the selected concept B. Separate reference-image edits
-extracted the standalone symbol and horizontal lockup, retaining their
-geometry and lettering and requesting transparent backgrounds.
+The built-in image-generation tool produced the assets on 30 October 2026.
+The brief requested a near-black open C and emerald check, followed by the
+exact wordmark Easy Captcha. The horizontal versions were generated using the
+preceding asset as a reference. They are separate raster outputs, not identical
+vector geometry or editable vector masters.
 
-Requested colors were `#141817` and `#087F63`. The raster fills retain slight
-tonal variation and are not exact-color vector masters. No editable vector
-file or trademark clearance is claimed.
+Requested colors were `#141817` and `#087F63`. Raster fills retain slight tonal
+variation. Trademark availability has not been assessed. The check symbol is
+a visual mark, not proof of security, privacy compliance or human identity.
 
 | Asset | SHA-256 |
 | --- | --- |
-| `src/Resources/config/plugin.png` | `ec44eedc46aded772246fd1b1c1e48c7df50f5216704ac855b5c0c96007709c0` |
-| `docs/starcode-logo.png` | `c5a2a7ee94deb1ba2d9a0500dc3203fb243f5d44bf3a7e0987763cd43a62c0a7` |
+| `src/Resources/config/plugin.png` | `fbd110d5b9f023c2be58cc1a02dcf56fa5359ab0d2631dec5d06d4347221e66f` |
+| `docs/easy-captcha-logo.png` | `6836be948c3af4df02992c4fe6a12461b22baf52a4168010690a93768f0441eb` |
+| `docs/easy-captcha-logo-readme.png` | `287d218ecd52040343c890828b70604dd1ab0cb614abbad0986f7725d46ed9bb` |
 
 After changing the icon, run `php bin/console plugin:refresh` in the test shop
 and inspect Extensions > My extensions at the native display size. Asset

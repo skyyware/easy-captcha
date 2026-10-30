@@ -1,7 +1,8 @@
 {
-  "name": "skyyware/starcode",
-  "version": "0.1.1",
+  "name": "skyyware/easy-captcha",
+  "version": "0.2.0",
   "description": "Self-hosted, privacy-friendly form protection for Shopware 6",
+  "homepage": "https://github.com/skyyware/easy-captcha",
   "type": "shopware-platform-plugin",
   "license": "MIT",
   "require": {
@@ -13,11 +14,17 @@
   "require-dev": {
     "phpunit/phpunit": "^11.5"
   },
+  "replace": {"skyyware/starcode": "0.1.*"},
+  "support": {
+    "issues": "https://github.com/skyyware/easy-captcha/issues",
+    "source": "https://github.com/skyyware/easy-captcha",
+    "security": "https://github.com/skyyware/easy-captcha/blob/main/SECURITY.md"
+  },
   "autoload": {"psr-4": {"Skyyware\\Starcode\\": "src/"}},
   "autoload-dev": {"psr-4": {"Skyyware\\Starcode\\Tests\\": "tests/"}},
   "extra": {
     "shopware-plugin-class": "Skyyware\\Starcode\\SkyyStarcode",
-    "label": {"en-GB": "Starcode", "de-DE": "Starcode"},
+    "label": {"en-GB": "Easy Captcha", "de-DE": "Easy Captcha"},
     "description": {
       "en-GB": "Self-hosted form protection without tracking or external CAPTCHA services.",
       "de-DE": "Selbst gehosteter Formularschutz ohne Tracking und externe CAPTCHA-Dienste."

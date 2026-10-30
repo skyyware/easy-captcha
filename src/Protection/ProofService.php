@@ -15,7 +15,7 @@ final readonly class ProofService
     public function __construct(private string $secret, private ProofStore $store)
     {
         if (strlen($secret) < 16) {
-            throw new \InvalidArgumentException('Starcode requires a configured application secret.');
+            throw new \InvalidArgumentException('Easy Captcha requires a configured application secret.');
         }
         $this->altcha = new Altcha(
             hash_hmac('sha256', 'starcode.challenge.v1', $secret),
